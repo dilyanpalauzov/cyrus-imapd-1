@@ -684,7 +684,7 @@ static int export_addressbook(struct transaction_t *txn)
 
     /* Check requested MIME type:
        1st entry in carddav_mime_types array MUST be default MIME type */
-    if ((hdr = spool_getheader(txn->req_hdrs, "Accept")))
+    if ((hdr = spool_getheader(txn->req_hdrs, "accept")))
         mime = get_accept_type(hdr, carddav_mime_types);
     else mime = carddav_mime_types;
     if (!mime) return HTTP_NOT_ACCEPTABLE;
