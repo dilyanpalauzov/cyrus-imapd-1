@@ -277,7 +277,7 @@ static int parseheader(struct protstream *fin, FILE *fout,
     /* Note: xstrdup()ing the string ensures we return
      * a minimal length string with no allocation slack
      * at the end */
-    if (headname != NULL) *headname = xstrdup(name.s);
+    if (headname != NULL) *headname = xstrduplcase(name.s);
     if (contents != NULL) *contents = xstrdup(body.s);
     if (rawvalue != NULL) *rawvalue = xstrdup(raw.s);
 
@@ -295,13 +295,10 @@ static struct header_t *__spool_cache_header(char *name, char *body, char *raw,
     hdr->raw = raw;
 
     /* add header to hash table */
-    char *lcname = lcase(xstrdup(name));
-    contents = (ptrarray_t *) hash_lookup(lcname, table);
+    contents = (ptrarray_t *) hash_lookup(name, table);
 
-    if (!contents) contents = hash_insert(lcname, ptrarray_new(), table);
+    if (!contents) contents = hash_insert(name, ptrarray_new(), table);
     ptrarray_append(contents, hdr);
-
-    free(lcname);
 
     return hdr;
 }

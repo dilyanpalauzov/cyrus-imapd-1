@@ -727,7 +727,7 @@ HIDDEN int dav_send_notification(xmlDocPtr doc,
         goto done;
     }
 
-    spool_cache_header(xstrdup("Content-Type"),
+    spool_cache_header(xstrdup("content-type"),
                        xstrdup(DAVNOTIFICATION_CONTENT_TYPE), txn.req_hdrs);
 
     r = notify_put(&txn, doc, mailbox, resource, webdavdb, 0);

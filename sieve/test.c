@@ -159,11 +159,11 @@ static int addheader(void *sc, void *mc,
 
     if (index < 0) {
         printf("appending header '%s: %s'\n", head, body);
-        spool_append_header(xstrdup(head), xstrdup(body), m->cache);
+        spool_append_header(xstrduplcase(head), xstrdup(body), m->cache);
     }
     else {
         printf("prepending header '%s: %s'\n", head, body);
-        spool_prepend_header(xstrdup(head), xstrdup(body), m->cache);
+        spool_prepend_header(xstrduplcase(head), xstrdup(body), m->cache);
     }
 
     sd->edited_header = 1;

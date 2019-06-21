@@ -1432,7 +1432,7 @@ static int jmap_ws(struct buf *inbuf, struct buf *outbuf,
         }
 
         /* Set Content-Type of request payload */
-        spool_cache_header(xstrdup("Content-Type"),
+        spool_cache_header(xstrdup("content-type"),
                            xstrdup("application/json"), txn->req_hdrs);
     }
     else if (!inbuf) {

@@ -140,9 +140,9 @@ static int addheader(void *sc, void *mc,
     if (head == NULL || body == NULL) return SIEVE_FAIL;
 
     if (index < 0)
-        spool_append_header(xstrdup(head), xstrdup(body), m->hdrcache);
+        spool_append_header(xstrduplcase(head), xstrdup(body), m->hdrcache);
     else
-        spool_prepend_header(xstrdup(head), xstrdup(body), m->hdrcache);
+        spool_prepend_header(xstrduplcase(head), xstrdup(body), m->hdrcache);
 
     sd->edited_header = 1;
 
