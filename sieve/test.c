@@ -176,18 +176,20 @@ static int deleteheader(void *sc, void *mc, const char *head, int index)
 {
     script_data_t *sd = (script_data_t *)sc;
     message_data_t *m = (message_data_t *) mc;
+    char *lcasedhead = xstrduplcase(head);
 
     if (head == NULL) return SIEVE_FAIL;
 
     if (!index) {
         printf("removing all headers '%s'\n", head);
-        spool_remove_header(xstrdup(head), m->cache);
+        spool_remove_header(lcasedhead, m->cache);
     }
     else {
         printf("removing header '%s[%d]'\n", head, index);
-        spool_remove_header_instance(xstrdup(head), index, m->cache);
+        spool_remove_header_instance(lcasedhead, index, m->cache);
     }
 
+    free(lcasedhead);
     sd->edited_header = 1;
 
     return SIEVE_OK;

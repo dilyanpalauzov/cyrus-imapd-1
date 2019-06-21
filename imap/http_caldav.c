@@ -7988,7 +7988,7 @@ int caldav_store_resource(struct transaction_t *txn, icalcomponent *ical,
             buf_printf(&txn->buf, "<%s>", organizer);
             mimehdr = charset_encode_mimeheader(buf_cstring(&txn->buf),
                                                 buf_len(&txn->buf), 0);
-            spool_replace_header(xstrdup("From"), mimehdr, txn->req_hdrs);
+            spool_replace_header(xstrdup("from"), mimehdr, txn->req_hdrs);
             buf_reset(&txn->buf);
         }
     }
@@ -7996,22 +7996,22 @@ int caldav_store_resource(struct transaction_t *txn, icalcomponent *ical,
     prop = icalcomponent_get_first_property(comp, ICAL_SUMMARY_PROPERTY);
     if (prop) {
         mimehdr = charset_encode_mimeheader(icalproperty_get_summary(prop), 0, 0);
-        spool_replace_header(xstrdup("Subject"), mimehdr, txn->req_hdrs);
+        spool_replace_header(xstrdup("subject"), mimehdr, txn->req_hdrs);
     }
-    else spool_replace_header(xstrdup("Subject"),
+    else spool_replace_header(xstrdup("subject"),
                             xstrdup(icalcomponent_kind_to_string(kind)),
                             txn->req_hdrs);
 
     if (schedule_address) {
         mimehdr = charset_encode_mimeheader(schedule_address, 0, 0);
-        spool_replace_header(xstrdup("X-Schedule-User-Address"),
+        spool_replace_header(xstrdup("x-schedule-user-address"),
                              mimehdr, txn->req_hdrs);
     }
 
     time_to_rfc5322(icaltime_as_timet_with_zone(icalcomponent_get_dtstamp(comp),
                                                utc_zone),
                    datestr, sizeof(datestr));
-    spool_replace_header(xstrdup("Date"), xstrdup(datestr), txn->req_hdrs);
+    spool_replace_header(xstrdup("date"), xstrdup(datestr), txn->req_hdrs);
 
     buf_reset(&txn->buf);
 
@@ -8022,7 +8022,7 @@ int caldav_store_resource(struct transaction_t *txn, icalcomponent *ical,
     else {
         buf_printf(&txn->buf, "<%s@%s>", uid, config_servername);
     }
-    spool_replace_header(xstrdup("Message-ID"),
+    spool_replace_header(xstrdup("message-id"),
                          buf_release(&txn->buf), txn->req_hdrs);
 
     buf_setcstr(&txn->buf, ICALENDAR_CONTENT_TYPE);
@@ -8031,7 +8031,7 @@ int caldav_store_resource(struct transaction_t *txn, icalcomponent *ical,
                    icalproperty_method_to_string(meth));
     }
     buf_printf(&txn->buf, "; component=%s", icalcomponent_kind_to_string(kind));
-    spool_replace_header(xstrdup("Content-Type"),
+    spool_replace_header(xstrdup("content-type"),
                          buf_release(&txn->buf), txn->req_hdrs);
 
     buf_printf(&txn->buf, "attachment;\r\n\tfilename=\"%s\"", resource);
@@ -8040,10 +8040,10 @@ int caldav_store_resource(struct transaction_t *txn, icalcomponent *ical,
     if (cdata->comp_flags.shared) {
         buf_printf(&txn->buf, ";\r\n\tper-user-data=true");
     }
-    spool_replace_header(xstrdup("Content-Disposition"),
+    spool_replace_header(xstrdup("content-disposition"),
                          buf_release(&txn->buf), txn->req_hdrs);
 
-    spool_remove_header(xstrdup("Content-Description"), txn->req_hdrs);
+    spool_remove_header("content-description", txn->req_hdrs);
 
     /* Store the resource */
     ret = dav_store_resource(txn, icalcomponent_as_ical_string(store_ical), 0,

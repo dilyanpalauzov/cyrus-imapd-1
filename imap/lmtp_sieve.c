@@ -156,10 +156,12 @@ static int deleteheader(void *sc, void *mc, const char *head, int index)
     message_data_t *m = ((deliver_data_t *) mc)->m;
 
     if (head == NULL) return SIEVE_FAIL;
+    char *lcasedhead = xstrduplcase(head);
 
-    if (!index) spool_remove_header(xstrdup(head), m->hdrcache);
-    else spool_remove_header_instance(xstrdup(head), index, m->hdrcache);
+    if (!index) spool_remove_header(lcasedhead, m->hdrcache);
+    else spool_remove_header_instance(lcasedhead, index, m->hdrcache);
 
+    free(lcasedhead);
     sd->edited_header = 1;
 
     return SIEVE_OK;

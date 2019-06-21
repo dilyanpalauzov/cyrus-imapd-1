@@ -342,7 +342,7 @@ EXPORTED void spool_append_header(char *name, char *body, hdrcache_t cache)
 
 EXPORTED void spool_replace_header(char *name, char *body, hdrcache_t cache)
 {
-    spool_remove_header(xstrdup(name), cache);
+    spool_remove_header(name, cache);
     spool_append_header(name, body, cache);
 }
 
@@ -350,7 +350,7 @@ static void __spool_remove_header(char *name, int first, int last,
                                   hdrcache_t cache)
 {
     ptrarray_t *contents =
-        (ptrarray_t *) hash_lookup(lcase(name), &cache->cache);
+        (ptrarray_t *) hash_lookup(name, &cache->cache);
 
     if (contents) {
         int idx;
@@ -380,8 +380,6 @@ static void __spool_remove_header(char *name, int first, int last,
             free(hdr);
         }
     }
-
-    free(name);
 }
 
 EXPORTED void spool_remove_header(char *name, hdrcache_t cache)
